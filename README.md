@@ -16,7 +16,7 @@ If you want to create Limbo using api you can follow this steps:
     <dependency>
        <groupId>com.github.bivashy.NanoLimboPlugin</groupId>
        <artifactId>api</artifactId>
-       <version>1.0.11</version>
+       <version>1.0.16</version>
     </dependency>
 </dependencies>
 ```
@@ -28,7 +28,7 @@ allprojects {
    }
 }
 dependencies {
-    implementation 'com.github.bivashy.NanoLimboPlugin:api:1.0.11'
+    implementation 'com.github.bivashy.NanoLimboPlugin:api:1.0.16'
 }
 ```
 ### How to use API?
