@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'com.gradleup.shadow' version '8.3.6'
-    id 'com.github.gmazzo.buildconfig' version '3.1.0'
+    id 'com.gradleup.shadow' version '9.3.0'
+    id 'com.github.gmazzo.buildconfig' version '6.0.7'
 }
 
 allprojects {
@@ -31,11 +31,11 @@ subprojects {
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.4'
 
         implementation 'org.spongepowered:configurate-yaml:4.2.0'
-        implementation 'io.netty:netty-all:4.2.7.Final'
-        implementation "net.kyori:adventure-text-serializer-plain:4.25.0"
-        implementation "net.kyori:adventure-text-serializer-gson:4.25.0"
-        implementation "net.kyori:adventure-text-serializer-legacy:4.25.0"
-        implementation 'net.kyori:adventure-nbt:4.25.0'
+        implementation 'io.netty:netty-all:4.2.9.Final'
+        implementation "net.kyori:adventure-text-serializer-plain:4.26.1"
+        implementation "net.kyori:adventure-text-serializer-gson:4.26.1"
+        implementation "net.kyori:adventure-text-serializer-legacy:4.26.1"
+        implementation 'net.kyori:adventure-nbt:4.26.1'
         implementation 'com.grack:nanojson:1.10'
         implementation 'com.google.code.gson:gson:2.13.2'
     }
