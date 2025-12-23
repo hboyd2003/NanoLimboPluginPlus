@@ -43,7 +43,7 @@ public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws DecoderException {
         if (!ctx.channel().isActive() || mappings == null) return;
 
         ByteMessage msg = new ByteMessage(buf);

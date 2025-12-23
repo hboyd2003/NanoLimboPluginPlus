@@ -27,8 +27,9 @@ import ua.nanit.limbo.connection.PacketHandler;
 import ua.nanit.limbo.connection.PacketSnapshots;
 import ua.nanit.limbo.world.DimensionRegistry;
 
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -78,7 +79,7 @@ public final class LimboServer {
         return commandHandler;
     }
 
-    public void start() throws Exception {
+    public void start() throws IOException, RejectedExecutionException {
         Log.setLevel(config.getDebugLevel());
         Log.info("Starting server...");
 
@@ -107,7 +108,7 @@ public final class LimboServer {
         TransportType transportType;
         try {
             transportType = TransportType.valueOf(transportTypeName);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             Log.debug("Unknown transport type '" + transportTypeName + "'. Using NIO.");
             transportType = TransportType.NIO;
         }

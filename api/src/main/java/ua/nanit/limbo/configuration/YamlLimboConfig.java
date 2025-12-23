@@ -26,12 +26,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.ConfigurationOptions;
+import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
-import ua.nanit.limbo.server.TransportType;
 import ua.nanit.limbo.server.data.BossBar;
 import ua.nanit.limbo.server.data.InfoForwarding;
 import ua.nanit.limbo.server.data.PingData;
@@ -85,7 +86,7 @@ public final class YamlLimboConfig implements LimboConfig {
         this.classLoader = classLoader;
     }
 
-    public YamlLimboConfig load() throws Exception {
+    public YamlLimboConfig load() throws ConfigurateException, SerializationException {
         ConfigurationOptions options = ConfigurationOptions.defaults().serializers(getSerializers());
         YamlConfigurationLoader loader = YamlConfigurationLoader.builder()
                 .source(this::getReader)
@@ -146,7 +147,7 @@ public final class YamlLimboConfig implements LimboConfig {
         return this;
     }
 
-    private BufferedReader getReader() throws IOException {
+    private BufferedReader getReader() throws IOException, FileNotFoundException {
         String name = "settings.yml";
         Path filePath = Paths.get(root.toString(), name);
 

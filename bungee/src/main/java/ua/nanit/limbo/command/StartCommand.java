@@ -10,6 +10,9 @@ import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.exception.SendMessageException;
 import ua.nanit.limbo.server.LimboServer;
 
+import java.io.IOException;
+import java.util.concurrent.RejectedExecutionException;
+
 @Command("limbostart")
 public class StartCommand {
     @Dependency
@@ -17,7 +20,7 @@ public class StartCommand {
 
     @Default
     @CommandPermission("limbo.start")
-    public void execute(CommandActor actor, LimboServer limboServer) throws Exception {
+    public void execute(CommandActor actor, LimboServer limboServer) throws SendMessageException, IOException, RejectedExecutionException {
         if (limboServer.isRunning())
             throw new SendMessageException(plugin.getLimboConfig().getMessages().message("already-running"));
         limboServer.start();

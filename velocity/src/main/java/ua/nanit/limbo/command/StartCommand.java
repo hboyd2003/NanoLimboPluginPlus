@@ -10,6 +10,8 @@ import revxrsal.commands.command.CommandActor;
 import revxrsal.commands.velocity.annotation.CommandPermission;
 import ua.nanit.limbo.server.LimboServer;
 
+import java.io.IOException;
+
 @Command("limbostart")
 public class StartCommand {
     @Dependency
@@ -17,7 +19,7 @@ public class StartCommand {
 
     @Default
     @CommandPermission("limbo.start")
-    public void execute(CommandActor actor, LimboServer limboServer) throws Exception {
+    public void execute(CommandActor actor, LimboServer limboServer) throws SendComponentException, IOException {
         if (limboServer.isRunning())
             throw new SendComponentException(plugin.getLimboConfig().getMessages().message("already-running"));
         limboServer.start();
