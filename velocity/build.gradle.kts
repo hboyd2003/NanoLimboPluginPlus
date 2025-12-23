@@ -1,5 +1,3 @@
-group = "com.bivashy.limbo"
-
 repositories {
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     maven { url = uri("https://jitpack.io") }
@@ -7,19 +5,11 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":api"))
+    implementation(project(":api", configuration = "shadow"))
     implementation("com.github.Revxrsal.Lamp:common:3.0.8")
     implementation("com.github.Revxrsal.Lamp:velocity:3.0.8")
     implementation("net.kyori:adventure-text-minimessage:4.11.0")
     compileOnly("org.spongepowered:configurate-yaml:4.2.0")
     compileOnly("com.velocitypowered:velocity-api:3.1.1")
     annotationProcessor("com.velocitypowered:velocity-api:3.1.1")
-}
-
-tasks.shadowJar {
-    archiveBaseName.set("NanoLimboPluginPlus-Velocity")
-    archiveClassifier.set("")
-    manifest {
-        attributes["Main-Class"] = "ua.nanit.limbo.NanoLimbo"
-    }
 }

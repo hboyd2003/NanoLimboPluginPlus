@@ -1,6 +1,7 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow").version("9.3.0")
+    id("maven-publish")
+    id("com.gradleup.shadow").version("9.3.0").apply(false)
     id("com.github.gmazzo.buildconfig").version("6.0.7")
 }
 
@@ -39,7 +40,10 @@ subprojects {
         implementation("com.google.code.gson:gson:2.13.2")
     }
 
-    tasks.shadowJar {
+    tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+        archiveBaseName.set(rootProject.name + "-" + project.name)
+        archiveClassifier.set("")
+
         from("LICENSE")
         minimize()
 
@@ -47,7 +51,6 @@ subprojects {
         relocate("io.leangen", "ua.nanit.shaded.io.leangen")
         relocate("com.google.errorprone", "ua.nanit.shaded.com.google.errorprone")
         relocate("com.google.gson", "ua.nanit.shaded.com.google.gson")
-        relocate("com.grack.nanojson", "ua.nanit.shaded.com.grack.nanojson")
         relocate("net.kyori.adventure", "ua.nanit.shaded.net.kyori.adventure")
         relocate("net.kyori.examination", "ua.nanit.shaded.net.kyori.examination")
         relocate("net.kyori.option", "ua.nanit.shaded.net.kyori.option")
@@ -59,12 +62,36 @@ subprojects {
     tasks.test {
         useJUnitPlatform()
     }
+
+    tasks.withType<Jar>() {
+        archiveBaseName.set(rootProject.name + "-" + project.name)
+    }
+
+    tasks.jar {
+        enabled = false
+    }
 }
-
-
 
 buildConfig {
     className("BuildConfig")
     packageName("ua.nanit.limbo")
     buildConfigField("LIMBO_VERSION", provider { "${project.version}" })
 }
+
+// Disable unneeded tasks for root project
+tasks.withType<JavaCompile>().configureEach {
+    enabled = false
+}
+
+tasks {
+    test {
+        enabled = false
+    }
+    assemble {
+        enabled = false
+    }
+    jar {
+        enabled = false
+    }
+}
+

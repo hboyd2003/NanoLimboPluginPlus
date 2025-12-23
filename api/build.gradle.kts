@@ -1,1 +1,16 @@
-plugins.apply("maven-publish")
+plugins {
+    id("maven-publish")
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    repositories {
+        maven {
+            mavenLocal()
+        }
+    }
+}
