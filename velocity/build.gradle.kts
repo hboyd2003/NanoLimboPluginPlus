@@ -9,7 +9,6 @@ dependencies {
     implementation("com.github.Revxrsal.Lamp:common:3.0.8")
     implementation("com.github.Revxrsal.Lamp:velocity:3.0.8")
     implementation("net.kyori:adventure-text-minimessage:4.11.0")
-    compileOnly("org.spongepowered:configurate-yaml:4.2.0")
-    compileOnly("com.velocitypowered:velocity-api:3.1.1")
-    annotationProcessor("com.velocitypowered:velocity-api:3.1.1")
+    compileOnly("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
+    annotationProcessor("com.velocitypowered:velocity-api:3.4.0-SNAPSHOT")
 }
