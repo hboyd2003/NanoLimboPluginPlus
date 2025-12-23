@@ -24,8 +24,7 @@ public class NbtMessageUtil {
     }
 
     public static BinaryTag fromJson(JsonElement json) {
-        if (json instanceof JsonPrimitive) {
-            JsonPrimitive jsonPrimitive = (JsonPrimitive) json;
+        if (json instanceof JsonPrimitive jsonPrimitive) {
             if (jsonPrimitive.isNumber()) {
                 Number number = json.getAsNumber();
 
@@ -68,7 +67,7 @@ public class NbtMessageUtil {
             BinaryTagType<LongBinaryTag> tagLongType = LongBinaryTag.longBinaryTag(0).type();
 
             BinaryTag listTag;
-            BinaryTagType<? extends BinaryTag> listType = fromJson(jsonArray.get(0)).type();
+            BinaryTagType<? extends BinaryTag> listType = fromJson(jsonArray.getFirst()).type();
             if (listType.equals(tagByteType)) {
                 byte[] bytes = new byte[jsonArray.size()];
                 for (int i = 0; i < bytes.length; i++) {

@@ -22,8 +22,7 @@ public class ChannelTrafficHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object msg) throws Exception {
-        if (msg instanceof ByteBuf) {
-            ByteBuf in = (ByteBuf) msg;
+        if (msg instanceof ByteBuf in) {
             int bytes = in.readableBytes();
 
             if (maxPacketSize > 0 && bytes > maxPacketSize) {

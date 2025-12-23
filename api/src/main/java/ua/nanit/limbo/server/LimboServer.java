@@ -17,9 +17,6 @@
 
 package ua.nanit.limbo.server;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.util.ResourceLeakDetector;

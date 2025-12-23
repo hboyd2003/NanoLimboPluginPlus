@@ -27,9 +27,9 @@ public class PacketKnownPacks implements PacketIn, PacketOut {
     public void encode(ByteMessage msg, Version version) {
         msg.writeVarInt(this.knownPacks.size());
         for (KnownPack knownPack : this.knownPacks) {
-            msg.writeString(knownPack.getNamespace());
-            msg.writeString(knownPack.getId());
-            msg.writeString(knownPack.getVersion());
+            msg.writeString(knownPack.namespace());
+            msg.writeString(knownPack.id());
+            msg.writeString(knownPack.version());
         }
     }
 
@@ -61,27 +61,5 @@ public class PacketKnownPacks implements PacketIn, PacketOut {
         return getClass().getSimpleName();
     }
 
-    public static class KnownPack {
-        private final String namespace;
-        private final String id;
-        private final String version;
-
-        public KnownPack(String namespace, String id, String version) {
-            this.namespace = namespace;
-            this.id = id;
-            this.version = version;
-        }
-
-        public String getNamespace() {
-            return namespace;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public String getVersion() {
-            return version;
-        }
-    }
+    public record KnownPack(String namespace, String id, String version) {}
 }

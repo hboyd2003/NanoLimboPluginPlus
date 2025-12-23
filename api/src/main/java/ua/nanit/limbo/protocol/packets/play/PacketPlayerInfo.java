@@ -89,7 +89,7 @@ public class PacketPlayerInfo implements PacketOut {
         return getClass().getSimpleName();
     }
 
-    public static enum Action {
+    public enum Action {
         ADD_PLAYER,
         INITIALIZE_CHAT,
         UPDATE_GAMEMODE,
