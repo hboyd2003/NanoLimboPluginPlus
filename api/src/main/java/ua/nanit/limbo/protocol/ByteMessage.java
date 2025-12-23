@@ -125,8 +125,7 @@ public class ByteMessage extends ByteBuf {
             throw new DecoderException("Cannot receive string longer than " + maxLen * 3 + " (got " + len + " bytes)");
         }
 
-        final String s = buf.toString(buf.readerIndex(), len, StandardCharsets.UTF_8);
-        buf.readerIndex(buf.readerIndex() + len);
+        final String s = buf.readString(len, StandardCharsets.UTF_8);
 
         if (s.length() > maxLen) {
             throw new DecoderException("Cannot receive string longer than " + maxLen + " (got " + s.length() + " characters)");
@@ -197,10 +196,19 @@ public class ByteMessage extends ByteBuf {
     }
 
     public void writeLongArray(long[] array) {
+        if (array == null) {
+            writeVarInt(0);
+            return;
+        }
+
         writeVarInt(array.length);
         for (long i : array) {
             writeLong(i);
         }
+    }
+
+    public void writeBitSet(BitSet bitSet) {
+        writeLongArray((bitSet != null ? bitSet.toLongArray() : null));
     }
 
     public void writeCompoundTagArray(CompoundBinaryTag[] compoundTags) {

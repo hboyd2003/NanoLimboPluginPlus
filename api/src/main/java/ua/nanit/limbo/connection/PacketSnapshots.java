@@ -92,6 +92,7 @@ public final class PacketSnapshots {
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_6;
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_7;
     public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_9;
+    public static List<PacketSnapshot> PACKETS_REGISTRY_DATA_1_21_11;
 
     private PacketSnapshot packetFinishConfiguration;
 
@@ -143,7 +144,11 @@ public final class PacketSnapshots {
         declareCommands.setCommands(Collections.emptyList());
 
         PacketPlayerInfo info = new PacketPlayerInfo();
-        info.setUsername(server.getConfig().getPlayerListUsername());
+        String playerListName = server.getConfig().getPlayerListUsername();
+        if (playerListName.length() > 16) {
+            playerListName = playerListName.substring(0, 16);
+        }
+        info.setUsername(playerListName);
         info.setGameMode(server.getConfig().getGameMode());
         info.setUuid(uuid);
 
@@ -241,9 +246,12 @@ public final class PacketSnapshots {
             return packetKnownPacks;
         });
 
+        // TODO Simplify.
         this.packetUpdateTags = PacketSnapshot.of(PacketUpdateTags.class, (version) -> {
             PacketUpdateTags packetUpdateTags = new PacketUpdateTags();
-            if (version.moreOrEqual(Version.V1_21_9)) {
+            if (version.moreOrEqual(Version.V1_21_11)) {
+                packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_11()));
+            } else if (version.moreOrEqual(Version.V1_21_9)) {
                 packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_9()));
             } else if (version.moreOrEqual(Version.V1_21_7)) {
                 packetUpdateTags.setTags(parseUpdateTags(server.getDimensionRegistry().getTags_1_21_7()));
@@ -277,6 +285,7 @@ public final class PacketSnapshots {
         PACKETS_REGISTRY_DATA_1_21_6 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_6());
         PACKETS_REGISTRY_DATA_1_21_7 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_7());
         PACKETS_REGISTRY_DATA_1_21_9 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_9());
+        PACKETS_REGISTRY_DATA_1_21_11 = createRegistryData(server, server.getDimensionRegistry().getCodec_1_21_11());
 
         packetFinishConfiguration = PacketSnapshot.of(new PacketFinishConfiguration());
 
@@ -293,11 +302,11 @@ public final class PacketSnapshots {
         // Make multiple chunks for edges
         for (int chunkX = chunkXOffset - chunkEdgeSize; chunkX <= chunkXOffset + chunkEdgeSize; ++chunkX) {
             for (int chunkZ = chunkZOffset - chunkEdgeSize; chunkZ <= chunkZOffset + chunkEdgeSize; ++chunkZ) {
-                PacketEmptyChunk packetEmptyChunk = new PacketEmptyChunk();
-                packetEmptyChunk.setX(chunkX);
-                packetEmptyChunk.setZ(chunkZ);
+                PacketChunkWithLight packetChunkWithLight = new PacketChunkWithLight();
+                packetChunkWithLight.setX(chunkX);
+                packetChunkWithLight.setZ(chunkZ);
 
-                emptyChunks.add(PacketSnapshot.of(packetEmptyChunk));
+                emptyChunks.add(PacketSnapshot.of(packetChunkWithLight));
             }
         }
         packetsEmptyChunks = emptyChunks;

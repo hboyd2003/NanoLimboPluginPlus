@@ -24,15 +24,11 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import com.grack.nanojson.JsonParserException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
-
-import com.grack.nanojson.JsonArray;
-import com.grack.nanojson.JsonObject;
-import com.grack.nanojson.JsonParser;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -216,7 +212,10 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
     }
 
     public void onKnownPacksReceived() {
-        if (clientVersion.moreOrEqual(Version.V1_21_9)) {
+        // TODO Simplify...
+        if (clientVersion.moreOrEqual(Version.V1_21_11)) {
+            writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_11);
+        } else if (clientVersion.moreOrEqual(Version.V1_21_9)) {
             writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_9);
         } else if (clientVersion.moreOrEqual(Version.V1_21_7)) {
             writePackets(PacketSnapshots.PACKETS_REGISTRY_DATA_1_21_7);
@@ -316,29 +315,39 @@ public class ClientConnection extends ChannelInboundHandlerAdapter {
 
         String socketAddressHostname = split[1];
         UUID uuid = UuidUtil.fromString(split[2]);
-        JsonArray arr;
-
-        try {
-            arr = JsonParser.array().from(split[3]);
-        } catch (JsonParserException e) {
-            e.printStackTrace();
-            return false;
-        }
 
         String token = null;
 
-        for (Object obj : arr) {
-            if (obj instanceof JsonObject) {
-                JsonObject prop = (JsonObject) obj;
-                if (prop.getString("name").equals("bungeeguard-token")) {
-                    token = prop.getString("value");
-                    break;
+        try {
+            JsonElement rootElement = JsonParser.parseString(split[3]);
+            if (!rootElement.isJsonArray()) {
+                return false;
+            }
+
+            JsonArray jsonArray = rootElement.getAsJsonArray();
+            for (JsonElement jsonElement : jsonArray) {
+                if (jsonElement.isJsonObject()) {
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+                    JsonElement nameElement = jsonObject.get("name");
+                    if (nameElement != null && nameElement.isJsonPrimitive()) {
+                        if (nameElement.getAsString().equals("bungeeguard-token")) {
+                            JsonElement valueElement = jsonObject.get("value");
+                            if (valueElement != null && valueElement.isJsonPrimitive()) {
+                                token = valueElement.getAsString();
+                                break;
+                            }
+                        }
+                    }
                 }
             }
+        } catch (JsonParseException e) {
+            return false;
         }
 
-        if (!server.getConfig().getInfoForwarding().hasToken(token))
+        if (!server.getConfig().getInfoForwarding().hasToken(token)) {
             return false;
+        }
 
         setAddress(socketAddressHostname);
         gameProfile.setUuid(uuid);

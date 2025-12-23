@@ -52,7 +52,7 @@ public interface LimboConfig {
 
     String getPlayerListFooter();
 
-    boolean isUseEpoll();
+    String getTransportType();
 
     int getBossGroupSize();
 

@@ -1,0 +1,5 @@
+rootProject.name = "NanoLimbo"
+
+include("api")
+include("bungee")
+include("velocity")

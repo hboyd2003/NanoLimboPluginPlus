@@ -1,8 +1,0 @@
-apply plugin: 'maven-publish'
-
-
-shadowJar{
-    manifest {
-        attributes 'Main-Class': 'ua.nanit.limbo.NanoLimbo'
-    }
-}
